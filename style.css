@@ -1,0 +1,3740 @@
+@font-face {
+  font-family: "GL Kupiura";
+  src: url("assets/gl-kupiura-medium-37268379451.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GL Dumbadze";
+  src: url("assets/gl-dumbadze-garnituri-semi-bold-22441730243.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+:root{
+  --deep:#10170c;
+  --deep-2:#182210;
+  --paper:#f6f1e7;
+  --paper-light:#fbf8f1;
+  --paper-warm:#eee7da;
+  --ink:#2a2f24;
+  --olive:#586146;
+  --sage:#788064;
+  --ivory:#f2ede2;
+
+  --canvas-w:430px;
+  --canvas-h:1530px;
+
+  --shadow-soft:0 12px 28px rgba(18,24,14,.14);
+  --shadow-deep:0 24px 50px rgba(0,0,0,.38);
+
+  --ease:cubic-bezier(.22,.8,.2,1);
+  --ease-soft:cubic-bezier(.16,1,.3,1);
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html{
+  margin:0;
+  min-height:100%;
+  background:var(--deep);
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100%;
+  overflow-x:hidden;
+
+  background:
+    radial-gradient(circle at 50% 0%, #1c2815 0, transparent 34rem),
+    var(--deep);
+
+  color:var(--ink);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+body.locked{
+  overflow:hidden;
+}
+
+figure,
+article,
+section,
+footer,
+nav{
+  margin:0;
+}
+
+img{
+  display:block;
+  max-width:100%;
+
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+button{
+  font:inherit;
+}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+
+/* =========================================================
+   1. OPENING SCREEN
+========================================================= */
+
+.opening{
+  position:fixed;
+  inset:0;
+
+  z-index:1000;
+
+  display:grid;
+  place-items:center;
+
+  min-height:100svh;
+
+  padding:
+    max(24px, env(safe-area-inset-top))
+    14px
+    max(24px, env(safe-area-inset-bottom));
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(87,101,66,.34),
+      transparent 29%
+    ),
+    linear-gradient(
+      180deg,
+      #14200f 0%,
+      #10170c 100%
+    );
+
+  opacity:1;
+  visibility:visible;
+
+  transition:
+    opacity .85s var(--ease-soft),
+    visibility .85s var(--ease-soft);
+}
+
+
+/* dark vignette */
+
+.opening::before{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 40%,
+      rgba(0,0,0,.48) 100%
+    );
+}
+
+
+/* subtle grain */
+
+.opening::after{
+  content:"";
+
+  position:absolute;
+  inset:-20%;
+
+  pointer-events:none;
+
+  opacity:.07;
+
+  background-image:
+    repeating-radial-gradient(
+      circle at 0 0,
+      rgba(255,255,255,.22) 0 1px,
+      transparent 1px 3px
+    );
+
+  animation:
+    grainShift 10s steps(8) infinite;
+}
+
+
+.opening.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+
+/* opening content holder */
+
+.opening-stage{
+  position:relative;
+  z-index:2;
+
+  width:min(96vw,700px);
+  height:min(72vw,470px);
+
+  min-height:270px;
+  max-height:470px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+/* envelope */
+
+.opening-envelope{
+  position:relative;
+
+  z-index:5;
+
+  width:min(68vw,420px);
+
+  padding:0;
+  border:0;
+
+  background:transparent;
+
+  cursor:pointer;
+
+  transform-origin:center;
+
+  filter:
+    drop-shadow(
+      0 24px 28px rgba(0,0,0,.44)
+    );
+
+  animation:
+    envelopeFloat 5.4s ease-in-out infinite;
+
+  transition:
+    transform .4s var(--ease-soft),
+    filter .4s var(--ease-soft);
+}
+
+
+.opening-envelope:hover{
+  transform:
+    translateY(-4px)
+    scale(1.018);
+
+  filter:
+    drop-shadow(
+      0 30px 36px rgba(0,0,0,.52)
+    );
+}
+
+
+.opening-envelope:active{
+  transform:
+    scale(.985);
+}
+
+
+.opening-envelope:focus-visible{
+  outline:
+    1px solid rgba(255,255,255,.72);
+
+  outline-offset:12px;
+
+  border-radius:4px;
+}
+
+
+.opening-envelope img{
+  width:100%;
+  height:auto;
+}
+
+
+/* butterflies */
+
+.intro-butterfly{
+  position:absolute;
+
+  z-index:6;
+
+  width:82px;
+  height:auto;
+
+  pointer-events:none;
+
+  filter:
+    drop-shadow(
+      0 10px 12px rgba(0,0,0,.35)
+    );
+}
+
+
+.intro-butterfly-left{
+  left:4%;
+  top:50%;
+
+  transform:
+    translateY(-50%)
+    rotate(-10deg);
+
+  animation:
+    butterflyLeft 5.1s ease-in-out infinite;
+}
+
+
+.intro-butterfly-right{
+  right:4%;
+  top:50%;
+
+  transform:
+    translateY(-50%)
+    scaleX(-1)
+    rotate(-10deg);
+
+  animation:
+    butterflyRight 5.4s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   2. MAIN INVITATION
+========================================================= */
+
+.invitation{
+  display:none;
+
+  min-height:100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      #1a2514 0,
+      transparent 28rem
+    ),
+    var(--deep);
+}
+
+
+.invitation.is-visible{
+  display:block;
+}
+
+
+/* main editorial paper canvas */
+.collage{
+  position: relative;
+  width: min(100vw, 430px);
+  height: 1530px;
+  margin: 0 auto;
+  overflow: hidden;
+
+  /* BACKGROUND IMAGE */
+  background-image: url("assets/paper.png");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+
+  box-shadow: 0 0 70px rgba(0,0,0,.34);
+}
+/* =========================================
+   VISIBLE HANDMADE PAPER TEXTURE
+========================================= */
+
+.collage::before{
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -1;
+  pointer-events: none;
+
+  opacity: .72;
+
+  background-image:
+
+    /* horizontal cotton fibers */
+    repeating-linear-gradient(
+      4deg,
+      rgba(105,91,65,.045) 0px,
+      rgba(105,91,65,.045) 1px,
+      transparent 1px,
+      transparent 7px
+    ),
+
+    /* vertical fibers */
+    repeating-linear-gradient(
+      93deg,
+      rgba(255,255,255,.20) 0px,
+      rgba(255,255,255,.20) 1px,
+      transparent 1px,
+      transparent 9px
+    ),
+
+    /* small paper imperfections */
+    radial-gradient(
+      circle,
+      rgba(102,88,62,.075) 0 1px,
+      transparent 1.4px
+    );
+
+  background-size:
+    auto,
+    auto,
+    23px 23px;
+}
+
+
+/* =========================================
+   PAPER LIGHT / AGING
+========================================= */
+
+.collage::after{
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 40;
+  pointer-events: none;
+
+  background:
+
+    /* slightly aged edges */
+    linear-gradient(
+      90deg,
+      rgba(115,96,65,.055),
+      transparent 8%,
+      transparent 92%,
+      rgba(115,96,65,.055)
+    ),
+
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.12),
+      transparent 12%,
+      transparent 88%,
+      rgba(105,88,58,.04)
+    );
+}
+
+
+/* =========================================================
+   3. SAVE THE DATE
+========================================================= */
+
+.opened-invite-wrap{
+  position:absolute;
+
+  z-index:5;
+
+  top:18px;
+  left:50%;
+
+  width:308px;
+
+  margin:0;
+
+  transform:
+    translateX(-50%);
+
+  filter:
+    drop-shadow(
+      0 10px 16px rgba(20,26,16,.11)
+    );
+}
+
+
+.opened-invite{
+  width:100%;
+  height:auto;
+}
+
+
+/* =========================================================
+   4. DETAILS — REFINED TYPOGRAPHY
+========================================================= */
+
+.details-wrap{
+  position:absolute;
+  z-index:12;
+
+  top:640px;
+  left:46%;
+
+  width:310px;
+  height:165px;
+
+  transform:translateX(-50%);
+
+  cursor:pointer;
+
+  transition:
+    filter .35s var(--ease-soft),
+    transform .35s var(--ease-soft);
+}
+
+.details-wrap img{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 7px 9px rgba(33,40,29,.10)
+    );
+}
+
+.details-copy{
+  position:absolute;
+  inset:0;
+  z-index:2;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  padding:0 24px;
+
+  text-align:center;
+  transform:none;
+  pointer-events:none;
+}
+
+.details-title{
+  display:block;
+  margin:0;
+
+  color:#283322;
+
+  font-family:
+    "GL Dumbadze", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:20px;
+  line-height:1.15;
+  font-weight:600;
+  font-style:normal;
+  letter-spacing:-.2px;
+  white-space:nowrap;
+}
+
+.details-hint{
+  display:block;
+  margin-top:10px;
+
+  color:#f4f0e6;
+
+  font-size:8.5px;
+  line-height:1.2;
+  font-weight: 700;
+  letter-spacing:.2px;
+  text-align:center;
+  opacity:.95;
+}
+
+.details-hint::after{
+  content:none;
+}
+
+.details-wrap:hover{
+  filter:brightness(1.025);
+}
+
+.details-wrap:hover .details-hint{
+  opacity:1;
+  transform:translateY(2px);
+}
+
+.details-wrap:active{
+  filter:brightness(.985);
+}
+
+.details-wrap:focus-visible{
+  outline:1px solid rgba(88,97,70,.42);
+  outline-offset:5px;
+}
+
+
+/* =========================================================
+   5. LACE INVITATION — RIGHT
+========================================================= */
+
+.lace-wrap{
+  position:absolute;
+  z-index:9;
+
+  top:295px;
+  right:4px;
+
+  width:255px;
+  height:380px;
+}
+
+.lace-frame{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 9px 14px rgba(38,35,30,.075)
+    );
+}
+
+
+/* =========================================================
+   LACE TYPOGRAPHY
+========================================================= */
+.lace-copy{
+  position:absolute;
+  z-index:2;
+
+  top:45%; /* იყო 50% */
+  left:50%;
+
+  width:64%;
+
+  transform:
+    translate(-50%, -47%);
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  color:#293326;
+
+  pointer-events:none;
+}
+
+
+/* "გიწვევთ ჩვენს ქორწილში" */
+
+.lace-intro{
+  display:block;
+
+  margin:0 0 24px;
+
+  color:#34402f;
+
+  font-family:
+    "GL Kupiura", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:12px;
+  line-height:1.42;
+
+  font-weight:500;
+
+  letter-spacing:.02px;
+
+  text-align:center;
+}
+
+.lace-names{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  font-family:
+    "GL Kupiura",
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  font-size:20px;
+  line-height:1.15;
+  font-weight:500;
+  letter-spacing:.2px;
+}
+
+.lace-names span{
+  display:block;
+
+  font-family:inherit;
+  font-size:inherit;
+  line-height:inherit;
+  font-weight:inherit;
+  letter-spacing:inherit;
+}
+/* DATE */
+
+.lace-date{
+  margin:31px 0 0 !important;
+
+  color:#364130;
+
+  font-family:
+    "GL Kupiura", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:9.5px;
+  line-height:1;
+
+  font-weight:500;
+
+  letter-spacing:.12px;
+
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   6. FLOWER BRIDGE
+========================================================= */
+
+.flower-bridge{
+  position:absolute;
+  z-index:14;
+
+  top:740px;
+  right:88px;
+
+  width:118px;
+  height:260px;
+
+  object-fit:contain;
+
+  transform:rotate(-2.5deg);
+  transform-origin:center top;
+
+  filter:
+    drop-shadow(0 8px 12px rgba(44,53,36,.11));
+}
+
+
+/* =========================================================
+   7. PHOTO CLUSTER
+========================================================= */
+
+.photo-cluster{
+  position:absolute;
+  z-index:8;
+
+  top:825px;
+  left:0;
+
+  width:100%;
+  height:400px;
+
+  pointer-events:none;
+}
+
+.polaroid{
+  position:absolute;
+  margin:0;
+
+  overflow:visible;
+
+  filter:
+    drop-shadow(
+      0 8px 14px rgba(35,30,24,.12)
+    );
+}
+
+
+/* REAL PHOTO */
+
+.polaroid-photo{
+  position:absolute;
+  z-index:1;
+
+  display:block;
+
+  object-fit:cover;
+
+  pointer-events:none;
+}
+
+
+/* PNG POLAROID FRAME */
+
+.polaroid-frame{
+  position:relative;
+  z-index:2;
+
+  display:block;
+
+  width:100%;
+  height:auto;
+
+  pointer-events:none;
+}
+
+
+/* BIG POLAROID */
+
+.big-polaroid{
+  top:0;
+  left:108px;
+
+  width:185px;
+
+  transform:
+    rotate(.8deg);
+}
+
+.big-polaroid .polaroid-photo{
+  top:8%;
+  left:8%;
+
+  width:84%;
+  height:72%;
+
+  object-position:center center;
+}
+
+
+/* SMALL POLAROID */
+
+.small-polaroid{
+  top:198px;
+  left:48px;
+
+  width:118px;
+
+  z-index:5;
+
+  transform:
+    rotate(-3.1deg);
+}
+
+.small-polaroid .polaroid-photo{
+  top:8%;
+  left:8%;
+
+  width:84%;
+  height:69%;
+
+  object-position:center center;
+}
+
+.small-polaroid figcaption{
+  position:absolute;
+  z-index:3;
+
+  left:50%;
+  bottom:8%;
+
+  width:80%;
+
+  transform:
+    translateX(-50%);
+
+  color:#3c4436;
+
+  text-align:center;
+
+  font-size:8px;
+  line-height:1.25;
+
+  letter-spacing:.5px;
+
+  pointer-events:none;
+}
+
+/* =========================================================
+   8. WAX SEAL
+========================================================= */
+
+.wax{
+  position:absolute;
+  z-index:15;
+
+  /* უფრო ქვემოთ */
+  top: 220px;
+
+  /* ოდნავ მარცხნივ */
+  left:245px;
+
+  width:75px;
+  height:auto;
+
+  transform:rotate(8deg);
+
+  filter:
+    drop-shadow(
+      0 4px 6px rgba(0,0,0,.15)
+    );
+}
+
+/* =========================================================
+   9. RSVP
+========================================================= */
+
+.rsvp-cluster{
+  position:absolute;
+  z-index:10;
+
+  top:1075px;
+  right:5px;
+
+  width:290px;
+  height:405px;
+
+  cursor:pointer;
+}
+
+
+.green-tag{
+  position:absolute;
+
+  inset:
+    0 auto auto 0;
+
+  width:100%;
+  height:auto;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 10px 16px rgba(45,53,36,.10)
+    );
+}
+
+
+/* =========================================================
+   RSVP TEXT — DARK GREEN / ELEGANT TYPOGRAPHY
+========================================================= */
+
+.rsvp-card-copy{
+  position:absolute;
+  z-index:8;
+
+  top:60%;
+  left:50%;
+
+
+  width:66%;
+
+  transform:
+    translate(-50%, -50%);
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  color:#2f3a2b;
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   TITLE — სტუმრის ანკეტა
+========================================================= */
+
+.rsvp-card-copy h3{
+  margin:0 0 22px;
+
+  color:#2f3a2b;
+
+  font-size:22px;
+  line-height:1.15;
+
+  font-weight:500;
+
+  letter-spacing:.2px;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.rsvp-card-copy p{
+  margin:0;
+
+  color:#364132;
+
+  font-size:10.5px;
+  line-height:1.65;
+
+  font-weight:400;
+
+  letter-spacing:.15px;
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.rsvp-card-copy strong{
+  position:relative;
+
+  display:block;
+
+  margin-top:18px;
+  padding-top:14px;
+
+  color:#2c3728;
+
+  font-size:13px;
+  line-height:1;
+
+  font-weight:700;
+
+  letter-spacing:1px;
+}
+
+
+/* tiny divider above date */
+
+.rsvp-card-copy strong::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:50%;
+
+  width:38px;
+  height:1px;
+
+  transform:translateX(-50%);
+
+  background:
+    rgba(47,58,43,.45);
+}
+
+
+/* =========================================================
+   CTA — შეავსეთ ანკეტა
+========================================================= */
+
+.rsvp-card-copy small{
+  position:relative;
+
+  display:block;
+
+  margin-top:28px;
+
+  color:#f4f0e6;
+
+  font-size:0;
+  line-height:1;
+
+  font-weight:500;
+
+  letter-spacing:.7px;
+
+  opacity:.9;
+}
+
+.rsvp-card-copy small::after{
+  content:"დააჭირეთ შესავსებად";
+
+  font-size: 9.5px;
+  line-height:1;
+
+  font-weight: 700;
+
+  letter-spacing:.7px;
+}
+
+
+/* small decorative line */
+
+.rsvp-card-copy small::before{
+  content:"";
+
+  display:block;
+
+  width:28px;
+  height:1px;
+
+  margin:
+    0 auto 10px;
+
+  background:
+    rgba(244,240,230,.55);
+}
+
+/* =========================================================
+   10. PEARLS
+========================================================= */
+
+.pearls{
+  position:absolute;
+
+  z-index:3;
+
+  right:-19px;
+  bottom:-58px;
+
+  width:150px;
+  height:auto;
+
+  transform:
+    rotate(-10deg);
+
+  transform-origin:
+    top center;
+
+  pointer-events:none;
+
+  filter:
+    drop-shadow(
+      0 4px 5px rgba(68,60,48,.08)
+    );
+}
+
+
+/* =========================================================
+   12. REVEAL BASE
+========================================================= */
+
+.reveal{
+  opacity:0;
+
+  will-change:
+    opacity,
+    transform,
+    filter;
+}
+
+
+/* =========================================================
+   13. CINEMATIC ENTRANCE SEQUENCE
+========================================================= */
+
+
+/* Save the Date */
+
+.invitation.is-visible
+.opened-invite-wrap{
+
+  animation:
+    revealInvite
+    1.45s
+    var(--ease-soft)
+    .15s
+    forwards;
+}
+
+
+/* Details */
+
+.invitation.is-visible
+.details-wrap{
+
+  animation:
+    revealDetails
+    1.25s
+    var(--ease-soft)
+    .65s
+    forwards;
+}
+
+
+/* Lace */
+
+.invitation.is-visible
+.lace-wrap{
+
+  animation:
+    revealLace
+    1.45s
+    var(--ease-soft)
+    .82s
+    forwards;
+}
+
+
+/* Flowers */
+
+.invitation.is-visible
+.flower-bridge{
+
+  animation:
+    revealFlower
+    1.35s
+    var(--ease-soft)
+    1.15s
+    forwards;
+}
+
+/* Big Polaroid */
+
+.invitation.is-visible
+.big-polaroid{
+  animation:
+    revealBigPhoto
+    1.35s
+    var(--ease-soft)
+    1.45s
+    forwards;
+}
+
+
+/* Small Polaroid */
+
+.invitation.is-visible
+.small-polaroid{
+  animation:
+    revealSmallPhoto
+    1.25s
+    var(--ease-soft)
+    1.75s
+    forwards;
+}
+
+
+/* Wax */
+
+.invitation.is-visible
+.wax{
+  animation:
+    revealWax
+    1.10s
+    var(--ease-soft)
+    2.05s
+    forwards;
+}
+
+/* RSVP */
+
+.invitation.is-visible
+.rsvp-cluster{
+
+  animation:
+    revealRsvp
+    1.45s
+    var(--ease-soft)
+    2.30s
+    forwards;
+}
+
+
+/* RSVP card tiny settle */
+
+.invitation.is-visible
+.rsvp-cluster
+.green-tag{
+
+  animation:
+    rsvpCardSettle
+    1.25s
+    var(--ease-soft)
+    2.38s
+    both;
+}
+
+
+/* Pearls */
+
+.invitation.is-visible
+.rsvp-cluster
+.pearls{
+
+  opacity:0;
+
+  animation:
+    revealPearls
+    1.35s
+    var(--ease-soft)
+    2.75s
+    forwards;
+}
+
+
+/* =========================================================
+   14. ENTRY KEYFRAMES
+========================================================= */
+
+@keyframes revealInvite{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(-50%,32px)
+      scale(.96);
+
+    filter:
+      blur(5px)
+      drop-shadow(
+        0 10px 16px rgba(20,26,16,0)
+      );
+  }
+
+
+  60%{
+    opacity:1;
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(-50%,0)
+      scale(1);
+
+    filter:
+      blur(0)
+      drop-shadow(
+        0 10px 16px rgba(20,26,16,.11)
+      );
+  }
+}
+
+
+@keyframes revealDetails{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(-50%,18px)
+      scale(.96);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(-50%,0)
+      scale(1);
+  }
+}
+
+
+@keyframes revealLace{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(26px,24px)
+      scale(.95);
+
+    filter:
+      blur(3px);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(0,0)
+      scale(1);
+
+    filter:
+      blur(0);
+  }
+}
+
+
+@keyframes revealFlower{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translateY(36px)
+      rotate(-7deg)
+      scale(.92);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translateY(0)
+      rotate(-2.5deg)
+      scale(1);
+  }
+}
+
+
+@keyframes revealBigPhoto{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translateY(34px)
+      rotate(-2deg)
+      scale(.95);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translateY(0)
+      rotate(.8deg)
+      scale(1);
+  }
+}
+
+
+@keyframes revealSmallPhoto{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(-28px,25px)
+      rotate(-8deg)
+      scale(.92);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(0,0)
+      rotate(-3.1deg)
+      scale(1);
+  }
+}
+
+
+@keyframes revealWax{
+
+  0%{
+    opacity:0;
+
+    transform:
+      scale(.48)
+      rotate(-10deg);
+  }
+
+
+  65%{
+    opacity:1;
+
+    transform:
+      scale(1.07)
+      rotate(10deg);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      scale(1)
+      rotate(8deg);
+  }
+}
+
+
+@keyframes revealRsvp{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(32px,28px)
+      scale(.95);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(0,0)
+      scale(1);
+  }
+}
+
+
+@keyframes rsvpCardSettle{
+
+  0%{
+    transform:
+      rotate(1.2deg)
+      scale(.985);
+  }
+
+
+  100%{
+    transform:
+      rotate(0deg)
+      scale(1);
+  }
+}
+
+
+@keyframes revealPearls{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(25px,-25px)
+      rotate(-18deg)
+      scale(.88);
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(0,0)
+      rotate(-10deg)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   15. AMBIENT MICRO ANIMATIONS
+========================================================= */
+
+@keyframes envelopeFloat{
+
+  0%,
+  100%{
+    transform:
+      translateY(0);
+  }
+
+
+  50%{
+    transform:
+      translateY(-5px);
+  }
+}
+
+
+@keyframes butterflyLeft{
+
+  0%,
+  100%{
+    transform:
+      translateY(-50%)
+      rotate(-10deg)
+      translateY(0);
+  }
+
+
+  50%{
+    transform:
+      translateY(-50%)
+      rotate(-6deg)
+      translateY(-8px);
+  }
+}
+
+
+@keyframes butterflyRight{
+
+  0%,
+  100%{
+    transform:
+      translateY(-50%)
+      scaleX(-1)
+      rotate(-10deg)
+      translateY(0);
+  }
+
+
+  50%{
+    transform:
+      translateY(-50%)
+      scaleX(-1)
+      rotate(-14deg)
+      translateY(-7px);
+  }
+}
+
+
+@keyframes grainShift{
+
+  0%{
+    transform:
+      translate3d(0,0,0);
+  }
+
+
+  25%{
+    transform:
+      translate3d(1.5%,-1%,0);
+  }
+
+
+  50%{
+    transform:
+      translate3d(-1%,1.5%,0);
+  }
+
+
+  75%{
+    transform:
+      translate3d(.5%,-1.5%,0);
+  }
+
+
+  100%{
+    transform:
+      translate3d(0,0,0);
+  }
+}
+
+
+/* =========================================================
+   17. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+
+    scroll-behavior:
+      auto !important;
+
+    animation-duration:
+      .001ms !important;
+
+    animation-delay:
+      0ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      .001ms !important;
+  }
+}
+
+.music-control{
+  position:absolute;
+  z-index:18;
+
+  top:430px;
+  left:32px;
+  right:auto;
+
+  width:140px;
+  height:140px;
+
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  opacity:0;
+
+  transform-origin:50% 88%;
+
+  filter:
+    drop-shadow(0 8px 12px rgba(38,45,29,.14));
+
+  transition:
+    transform .4s var(--ease-soft),
+    filter .4s var(--ease-soft),
+    opacity .4s ease;
+}
+
+
+.music-control img{
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   HOVER
+========================================================= */
+
+.music-control:hover{
+  transform:
+    translateY(-3px)
+    scale(1.04);
+
+  filter:
+    drop-shadow(
+      0 12px 16px rgba(38,45,29,.18)
+    );
+}
+
+
+/* =========================================================
+   CLICK
+========================================================= */
+
+.music-control:active{
+  transform:scale(.96);
+}
+
+/* =========================================================
+   MUSIC PLAYING — GENTLE LEFT / RIGHT SWAY
+========================================================= */
+
+.music-control.is-playing{
+  opacity:1;
+
+  animation:
+    gramophoneSway
+    3.2s
+    ease-in-out
+    infinite;
+
+  transform-origin:50% 88%;
+}
+
+
+/* =========================================================
+   GRAMOPHONE SWAY
+========================================================= */
+
+@keyframes gramophoneSway{
+
+  0%{
+    transform:
+      rotate(-4deg)
+      translateY(0);
+  }
+
+  25%{
+    transform:
+      rotate(-1deg)
+      translateY(-1px);
+  }
+
+  50%{
+    transform:
+      rotate(4deg)
+      translateY(0);
+  }
+
+  75%{
+    transform:
+      rotate(1deg)
+      translateY(-1px);
+  }
+
+  100%{
+    transform:
+      rotate(-4deg)
+      translateY(0);
+  }
+}
+
+
+/* =========================================================
+   PLAYING HOVER
+   Keeps the animation running while hovered.
+========================================================= */
+
+.music-control.is-playing:hover{
+  filter:
+    drop-shadow(
+      0 12px 17px rgba(38,45,29,.19)
+    );
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.music-control:focus-visible{
+  outline:
+    1px solid rgba(88,97,70,.45);
+
+  outline-offset:6px;
+
+  border-radius:50%;
+}
+
+
+/* =========================================================
+   ENTRANCE ANIMATION
+========================================================= */
+
+.invitation.is-visible .music-control{
+  animation:
+    revealGramophone
+    1.35s
+    var(--ease-soft)
+    2.10s
+    forwards;
+}
+
+
+@keyframes revealGramophone{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(18px,18px)
+      scale(.84)
+      rotate(4deg);
+
+    filter:
+      blur(2px)
+      drop-shadow(
+        0 8px 12px rgba(38,45,29,0)
+      );
+  }
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(0,0)
+      scale(1)
+      rotate(0deg);
+
+    filter:
+      blur(0)
+      drop-shadow(
+        0 8px 12px rgba(38,45,29,.14)
+      );
+  }
+}
+
+
+/* =========================================================
+   IMPORTANT:
+   WHEN MUSIC IS PLAYING, SWAY MUST OVERRIDE ENTRANCE
+========================================================= */
+
+.invitation.is-visible .music-control.is-playing{
+  opacity:1;
+
+  animation:
+    gramophoneSway
+    3.2s
+    ease-in-out
+    infinite;
+
+  transform-origin:50% 88%;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  .invitation.is-visible .music-control,
+  .invitation.is-visible .music-control.is-playing{
+    animation:none !important;
+
+    opacity:1;
+
+    transform:none;
+  }
+}
+
+/* =========================================================
+   19. CLICKABLE DETAILS + RSVP STATES
+   Keeps the existing composition unchanged.
+========================================================= */
+
+.details-wrap,
+.rsvp-cluster{
+  cursor:pointer;
+}
+
+
+.rsvp-cluster{
+  transition:
+    filter .35s var(--ease-soft);
+}
+
+.details-wrap:hover,
+.rsvp-cluster:hover{
+  filter:brightness(1.025);
+}
+
+.details-wrap:focus-visible,
+.rsvp-cluster:focus-visible{
+  outline:1px solid rgba(88,97,70,.45);
+  outline-offset:6px;
+}
+
+.details-wrap:active,
+.rsvp-cluster:active{
+  filter:brightness(.985);
+}
+
+
+/* =========================================================
+   20. MODAL OVERLAY
+========================================================= */
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+
+  display:grid;
+  place-items:center;
+
+  padding:
+    max(22px, env(safe-area-inset-top))
+    18px
+    max(22px, env(safe-area-inset-bottom));
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(30,40,24,.30),
+      rgba(12,18,9,.78)
+    );
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transition:
+    opacity .55s var(--ease-soft),
+    visibility .55s var(--ease-soft);
+}
+
+.modal-overlay.is-open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+
+/* =========================================================
+   DETAILS MODAL
+========================================================= */
+
+#detailsModal{
+  padding:
+    max(10px, env(safe-area-inset-top))
+    10px
+    max(10px, env(safe-area-inset-bottom));
+
+  background:
+    rgba(10, 16, 8, .78);
+
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+
+  overflow-y:auto;
+}
+
+
+/* =========================================================
+   PAPER
+========================================================= */
+
+.details-paper-modal{
+  position:relative;
+
+  width:min(94vw, 430px);
+
+  margin:auto;
+
+  background:transparent;
+
+  filter:
+    drop-shadow(
+      0 25px 45px rgba(5,10,4,.38)
+    );
+}
+
+
+/* PNG MUST STAY UNDER CONTENT */
+
+.details-paper-image{
+  position:relative;
+
+  z-index:1;
+
+  display:block;
+
+  width:100%;
+  height:auto;
+
+  pointer-events:none;
+  user-select:none;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.details-paper-content{
+  position:absolute;
+
+  z-index:5;
+
+  /* მთავარი გასწორება */
+  top:16%;
+  left:13%;
+  right:13%;
+  bottom:8%;
+
+  padding:
+    12px 5px 20px;
+
+  overflow-y:auto;
+
+  color:#30392b;
+
+  font-family:
+    "GL Dumbadze", "Noto Serif Georgian", Georgia, serif;
+
+  text-align:center;
+
+  scrollbar-width:none;
+}
+
+
+.details-paper-content::-webkit-scrollbar{
+  display:none;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.details-paper-header{
+  position:relative;
+
+  z-index:6;
+
+  margin:
+    0 0 24px;
+
+  text-align:center;
+}
+
+
+.details-eyebrow{
+  display:block;
+
+  margin-bottom:8px;
+
+  color:#68705e;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:8px;
+
+  font-style:italic;
+
+  letter-spacing:1px;
+}
+
+.details-paper-header h2{
+  margin:0;
+
+  color:#283322;
+
+  font-size:26px;
+  line-height:1.2;
+
+  font-weight:600;
+
+  letter-spacing:-.45px;
+
+  /* არ გადაიტანოს მეორე ხაზზე */
+  white-space:nowrap;
+}
+
+
+.details-date{
+  margin:11px 0 0;
+
+  color:#46513e;
+
+  font-size:13px;
+  line-height:1.3;
+
+  font-weight:600;
+
+  letter-spacing:.15px;
+}
+
+
+.details-paper-header .details-hint{
+  margin:15px auto 0;
+
+  color:#687060;
+
+  font-size:9px;
+  line-height:1.5;
+
+  font-weight:500;
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.details-timeline{
+  position:relative;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:9px;
+
+  margin-top:20px;
+
+  text-align:left;
+}
+
+
+/* =========================================================
+   EVENT
+========================================================= */
+
+.details-event{
+  position:relative;
+
+  display:grid;
+
+  grid-template-columns:
+    58px 1fr;
+
+  align-items:center;
+
+  gap:15px;
+
+  min-height:66px;
+
+  padding:
+    10px 8px;
+
+  color:#313a2c;
+
+  text-decoration:none;
+
+  border-bottom:
+    1px solid rgba(67,78,57,.14);
+
+  transition:
+    transform .25s ease,
+    background .25s ease;
+}
+
+
+.details-event:hover{
+  transform:
+    translateX(2px);
+
+  background:
+    rgba(82,95,70,.045);
+}
+
+
+/* =========================================================
+   TIME
+========================================================= */
+
+.details-event time{
+  color:#394632;
+
+  font-family:
+    "GL Kupiura", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:15px;
+  line-height:1;
+
+  font-weight:700;
+
+  letter-spacing:.2px;
+}
+
+
+/* =========================================================
+   EVENT COPY
+========================================================= */
+
+.details-event-copy{
+  display:flex;
+  flex-direction:column;
+
+  gap:5px;
+}
+
+
+/* ფოტოსესია / ჯვრისწერა / ცერემონია / წვეულება */
+
+.details-event-copy strong{
+  color:#2b3626;
+
+  font-size:12px;
+  line-height:1.35;
+
+  font-weight:700;
+}
+
+
+/* LOCATION */
+
+.details-event-copy span{
+  color:#5f6858;
+
+  font-size:9px;
+  line-height:1.5;
+
+  font-weight:500;
+}
+
+
+/* =========================================================
+   MAIN LOCATION
+========================================================= */
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.details-close{
+  position:absolute;
+
+  z-index:20;
+
+  top:7%;
+  right:7%;
+
+  width:32px;
+  height:32px;
+
+  display:grid;
+  place-items:center;
+
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  background:
+    rgba(242,239,226,.88);
+
+  color:#3b4535;
+
+  font-family:
+    "GL Kupiura", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:21px;
+  line-height:1;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 5px 12px rgba(20,27,17,.10);
+}
+
+/* =========================================================
+   28. RSVP PAPER MODAL — CUSTOM IMAGE CARD
+   Background image element: assets/rsvp2.png
+========================================================= */
+
+#rsvpModal{
+  padding:
+    max(12px, env(safe-area-inset-top))
+    12px
+    max(12px, env(safe-area-inset-bottom));
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(58,69,46,.26),
+      rgba(10,15,8,.78) 72%
+    );
+
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+}
+
+
+/* paper shell */
+
+.rsvp-paper-modal{
+  position:relative;
+
+  width:min(94vw,420px);
+  max-height:94svh;
+
+  margin:auto;
+
+  overflow:hidden;
+
+  background:transparent;
+
+  filter:
+    drop-shadow(
+      0 28px 52px rgba(5,10,4,.42)
+    );
+
+  transform-origin:center;
+}
+
+
+/* actual PNG */
+
+.rsvp-paper-image{
+  position:relative;
+  z-index:1;
+
+  display:block;
+
+  width:100%;
+  height:auto;
+
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.rsvp-close{
+  position:absolute;
+
+  top:8.5%;
+  right:8.5%;
+
+  z-index:10;
+
+  width:32px;
+  height:32px;
+
+  display:grid;
+  place-items:center;
+
+  padding:0;
+
+  border:0;
+  border-radius:50%;
+
+  background:
+    rgba(246,242,232,.74);
+
+  color:#35402f;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:22px;
+  line-height:1;
+
+  cursor:pointer;
+
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+
+  transition:
+    transform .28s var(--ease-soft),
+    background .28s ease,
+    opacity .28s ease;
+}
+
+
+.rsvp-close:hover{
+  transform:
+    rotate(5deg)
+    scale(1.05);
+
+  background:
+    rgba(246,242,232,.94);
+}
+
+
+.rsvp-close:focus-visible{
+  outline:
+    1px solid rgba(60,72,50,.44);
+
+  outline-offset:3px;
+}
+
+
+/* =========================================================
+   RSVP CONTENT ON PAPER
+========================================================= */
+
+.rsvp-paper-content{
+  position:absolute;
+
+  z-index:3;
+
+  top:15.5%;
+  right:13%;
+  bottom:8%;
+  left:13%;
+
+  overflow-y:auto;
+  overscroll-behavior:contain;
+
+  padding:
+    10px 4px 18px;
+
+  color:#2c3527;
+
+  font-family:
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  scrollbar-width:none;
+}
+
+
+.rsvp-paper-content::-webkit-scrollbar{
+  display:none;
+}
+
+/* =========================================================
+   RSVP HEADER
+========================================================= */
+
+.rsvp-paper-header{
+  margin-bottom:24px;
+
+  text-align:center;
+}
+
+
+/* ოთო & თაკო */
+
+
+/* სტუმრის ანკეტა */
+
+.rsvp-paper-header h2{
+  margin:0;
+
+  color:#283322;
+
+  font-family:
+    "GL Dumbadze", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:27px;
+  line-height:1.2;
+
+  font-weight:700;
+
+  letter-spacing:-.4px;
+
+  white-space:nowrap;
+}
+
+
+/* გთხოვთ, დაადასტუროთ თქვენი დასწრება */
+
+.rsvp-intro{
+  margin:13px 0 0;
+
+  color:#46513e;
+
+  font-size:11px;
+  line-height:1.55;
+
+  font-weight:500;
+}
+
+
+/* =========================================================
+   DEADLINE
+========================================================= */
+
+
+/* 20.08.2026 */
+
+
+/* =========================================================
+   RSVP FORM
+========================================================= */
+
+.rsvp-paper-form{
+  margin:0;
+
+  text-align:left;
+}
+
+
+.rsvp-field{
+  margin-bottom:20px;
+}
+
+
+/* =========================================================
+   LABELS
+   სახელი და გვარი
+   შეძლებთ დასწრებას?
+   კომენტარი / სურვილი
+========================================================= */
+
+.rsvp-field label,
+.rsvp-attendance legend{
+  display:block;
+
+  margin-bottom:9px;
+
+  color:#303b2b;
+
+  font-family:
+    "GL Kupiura", "Noto Serif Georgian", Georgia, serif;
+
+  font-size:11px;
+  line-height:1.35;
+
+  font-weight:700;
+}
+
+
+/* =========================================================
+   TEXT INPUT + TEXTAREA
+========================================================= */
+
+.rsvp-paper-form input[type="text"],
+.rsvp-paper-form textarea{
+  width:100%;
+
+  padding:
+    10px 2px 9px;
+
+  border:0;
+
+  border-bottom:
+    1px solid rgba(70,82,60,.35);
+
+  border-radius:0;
+
+  background:transparent;
+
+  color:#283223;
+
+  font-family:
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  font-size:11px;
+  line-height:1.5;
+
+  font-weight:500;
+
+  outline:none;
+
+  transition:
+    border-color .25s ease,
+    background .25s ease;
+}
+
+
+.rsvp-paper-form textarea{
+  min-height:65px;
+
+  resize:none;
+}
+
+
+.rsvp-paper-form input[type="text"]::placeholder,
+.rsvp-paper-form textarea::placeholder{
+  color:#7b8274;
+
+  font-size:9.5px;
+
+  font-weight:400;
+
+  opacity:.8;
+}
+
+
+.rsvp-paper-form input[type="text"]:focus,
+.rsvp-paper-form textarea:focus{
+  border-bottom-color:#4e5a42;
+
+  background:
+    rgba(255,255,255,.12);
+}
+
+
+/* =========================================================
+   ATTENDANCE
+========================================================= */
+
+.rsvp-attendance{
+  margin:
+    3px 0 21px;
+
+  padding:0;
+
+  border:0;
+}
+
+
+/* დიახ / ვერ დავესწრები */
+
+.rsvp-option{
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:11px;
+
+  color:#46513e;
+
+  font-family:
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  font-size:10px;
+  line-height:1.45;
+
+  font-weight:500;
+
+  cursor:pointer;
+}
+
+
+.rsvp-option input[type="radio"]{
+  flex:0 0 auto;
+
+  width:15px;
+  height:15px;
+
+  margin:0;
+
+  accent-color:#4d583f;
+
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.rsvp-paper-form .rsvp-submit{
+  width:100%;
+
+  margin-top:9px;
+
+  padding:
+    14px 16px;
+
+  border:
+    1px solid #4d583f;
+
+  background:#4d583f;
+
+  color:#f7f2e7;
+
+  font-family:
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  font-size:11px;
+  line-height:1;
+
+  font-weight:700;
+
+  letter-spacing:.2px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 8px 16px rgba(45,55,38,.10);
+
+  transition:
+    transform .3s ease,
+    background .3s ease,
+    box-shadow .3s ease;
+}
+
+
+.rsvp-paper-form .rsvp-submit:hover{
+  transform:translateY(-2px);
+
+  background:#414c36;
+
+  box-shadow:
+    0 11px 20px rgba(45,55,38,.14);
+}
+
+
+.rsvp-paper-form .rsvp-submit:active{
+  transform:translateY(0);
+}
+
+
+/* =========================================================
+   STATUS MESSAGE
+========================================================= */
+
+.rsvp-status,
+#rsvpStatus{
+  min-height:18px;
+
+  margin:
+    13px 0 0;
+
+  color:#4d5944;
+
+  text-align:center;
+
+  font-family:
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  font-size:9px;
+  line-height:1.45;
+
+  font-weight:600;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+
+/* =========================================================
+   RSVP OPEN ANIMATION
+========================================================= */
+
+#rsvpModal.is-open
+.rsvp-paper-modal{
+  animation:
+    rsvpPaperReveal
+    .78s
+    var(--ease-soft)
+    both;
+}
+
+
+@keyframes rsvpPaperReveal{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translateY(30px)
+      scale(.94)
+      rotate(.8deg);
+
+    filter:
+      blur(3px)
+      drop-shadow(
+        0 15px 28px rgba(5,10,4,.15)
+      );
+  }
+
+
+  100%{
+    opacity:1;
+
+    transform:
+      translateY(0)
+      scale(1)
+      rotate(0);
+
+    filter:
+      blur(0)
+      drop-shadow(
+        0 28px 52px rgba(5,10,4,.42)
+      );
+  }
+}
+
+
+/* =========================================================
+   RSVP CONTENT STAGGER
+========================================================= */
+
+#rsvpModal.is-open .rsvp-paper-header{
+  animation:
+    rsvpContentReveal
+    .62s ease .24s both;
+}
+
+#rsvpModal.is-open .rsvp-field:nth-of-type(1){
+  animation:
+    rsvpContentReveal
+    .62s ease .34s both;
+}
+
+#rsvpModal.is-open .rsvp-attendance{
+  animation:
+    rsvpContentReveal
+    .62s ease .43s both;
+}
+
+#rsvpModal.is-open .rsvp-field:nth-of-type(2){
+  animation:
+    rsvpContentReveal
+    .62s ease .52s both;
+}
+
+#rsvpModal.is-open .rsvp-submit{
+  animation:
+    rsvpContentReveal
+    .62s ease .61s both;
+}
+
+
+/* =========================================================
+   RSVP CONTENT REVEAL ANIMATION
+========================================================= */
+
+@keyframes rsvpContentReveal{
+
+  from{
+    opacity:0;
+    transform:translateY(9px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================================================
+   RSVP REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  #rsvpModal.is-open .rsvp-paper-modal,
+  #rsvpModal.is-open .rsvp-paper-header,
+  #rsvpModal.is-open .rsvp-field,
+  #rsvpModal.is-open .rsvp-attendance,
+  #rsvpModal.is-open .rsvp-submit,
+  #rsvpModal.is-open .rsvp-paper-footer{
+    animation:none !important;
+  }
+}
+/* =========================================================
+   OPENING HINT + INVITÉ SIGNATURE
+========================================================= */
+
+.opening-hint{
+  position:absolute;
+  z-index:8;
+
+  left:50%;
+  bottom:12%;
+
+  width:min(90vw,520px);
+
+  margin:0;
+
+  transform:translateX(-50%);
+
+  color:rgba(244,240,230,.9);
+
+  font-family:
+    "GL Kupiura",
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+
+  font-size:10.5px;
+  line-height:1.4;
+  font-weight:500;
+
+  letter-spacing:.15px;
+
+  text-align:center;
+
+  pointer-events:none;
+
+  animation:openingHintPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes openingHintPulse{
+  0%,
+  100%{
+    opacity:.64;
+  }
+
+  50%{
+    opacity:1;
+  }
+}
+
+.opening .invite-footer{
+  position:absolute;
+  z-index:20;
+
+  left:50%;
+  bottom:max(20px, env(safe-area-inset-bottom));
+
+  transform:translateX(-50%);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:7px;
+
+  width:max-content;
+
+  color:rgba(244,240,230,.66);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+}
+
+.opening .invite-footer span{
+  font-size:7px;
+  line-height:1;
+
+  font-style:italic;
+  font-weight:400;
+
+  letter-spacing:.45px;
+}
+
+.opening .invite-footer a{
+  position:relative;
+
+  color:#f4f0e6;
+
+  font-size:9px;
+  line-height:1;
+
+  font-weight:600;
+
+  letter-spacing:2px;
+
+  text-decoration:none;
+}
+
+.opening .invite-footer a::after{
+  content:"";
+
+  position:absolute;
+
+  left:50%;
+  bottom:-6px;
+
+  width:18px;
+  height:1px;
+
+  transform:translateX(-50%);
+
+  background:rgba(244,240,230,.34);
+}
+
+
+/* =========================================================
+   RSVP HEADER — DESKTOP + MOBILE
+========================================================= */
+
+.rsvp-paper-header{
+  position:relative;
+  top:12px;
+
+  margin-bottom:34px;
+}
+
+
+/* =========================================================
+   MOBILE — OPENING + MAIN COLLAGE
+========================================================= */
+
+@media (max-width:430px){
+
+  :root{
+    --canvas-w:100vw;
+  }
+
+  .collage{
+    width:100vw;
+  }
+
+  .opening-stage{
+    width:100%;
+  }
+
+  .opening-envelope{
+    width:72vw;
+  }
+
+  .intro-butterfly{
+    width:68px;
+  }
+
+  .intro-butterfly-left{
+    left:1%;
+  }
+
+  .intro-butterfly-right{
+    right:1%;
+  }
+
+  .details-wrap{
+    left:50%;
+
+    width:min(310px,88vw);
+    height:165px;
+
+    transform:translateX(-50%);
+  }
+
+  .details-title{
+    font-size:19px;
+  }
+
+  .details-hint{
+    font-size:8px;
+  }
+
+  .music-control{
+    top:438px;
+    left:8px;
+
+    width:122px;
+    height:122px;
+  }
+
+  /* Polaroid flower — mobile only */
+  .flower-bridge{
+    top:780px;
+    right:8px;
+  }
+
+  .photo-cluster{
+    top:825px;
+  }
+
+  .lace-intro{
+    font-size:11.5px;
+  }
+
+  .lace-names{
+    font-size:20px;
+  }
+
+  .lace-names span{
+    font-size:12px;
+  }
+
+  .lace-date{
+    font-size:9px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE — DETAILS MODAL
+   Entire program visible without inner scrolling.
+========================================================= */
+
+@media (max-width:430px){
+
+  #detailsModal{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:
+      max(6px, env(safe-area-inset-top))
+      6px
+      max(6px, env(safe-area-inset-bottom));
+
+    overflow:hidden;
+  }
+
+  .details-paper-modal{
+    width:min(92vw,380px);
+    max-height:92svh;
+
+    margin:auto;
+
+    overflow:visible;
+  }
+
+  .details-paper-content{
+    top:17%;
+    right:8%;
+    bottom:5%;
+    left:8%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+    padding:0;
+
+    overflow:visible;
+
+    transform:none;
+  }
+
+  .details-paper-header{
+    margin:0 0 11px;
+
+    text-align:center;
+  }
+
+  .details-paper-header h2{
+    margin:0;
+
+    font-size:23px;
+    line-height:1.08;
+    font-weight:600;
+
+    letter-spacing:-.2px;
+
+    white-space:nowrap;
+  }
+
+  .details-date{
+    margin-top:7px;
+
+    font-size:12px;
+    line-height:1.2;
+    font-weight:600;
+  }
+
+  .details-paper-header .details-hint{
+    margin-top:8px;
+
+    font-size:8px;
+    line-height:1.3;
+    font-weight:600;
+  }
+
+  .details-timeline{
+    width:100%;
+
+    gap:0;
+
+    margin-top:2px;
+  }
+
+  .details-event{
+    grid-template-columns:54px 1fr;
+
+    gap:10px;
+
+    min-height:59px;
+
+    padding:6px 4px;
+  }
+
+  .details-event time{
+    font-size:15px;
+    font-weight:700;
+  }
+
+  .details-event-copy{
+    gap:3px;
+  }
+
+  .details-event-copy strong{
+    font-size:11.5px;
+    line-height:1.22;
+    font-weight:700;
+  }
+
+  .details-event-copy span{
+    font-size:8.5px;
+    line-height:1.3;
+    font-weight:500;
+  }
+
+  .details-close{
+    top:6.2%;
+    right:5.5%;
+  }
+}
+
+
+/* =========================================================
+   MOBILE — RSVP MODAL
+   Entire form + submit visible, card sits slightly lower.
+========================================================= */
+
+@media (max-width:430px){
+
+  #rsvpModal{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:
+      max(5px, env(safe-area-inset-top))
+      5px
+      max(5px, env(safe-area-inset-bottom));
+
+    overflow:hidden;
+  }
+
+  .rsvp-paper-modal{
+    width:min(92vw,380px);
+    max-height:92svh;
+
+    margin:auto;
+
+    overflow:visible;
+
+    transform:translateY(14px);
+  }
+
+  .rsvp-paper-content{
+    top:19.5%;
+    right:10.5%;
+    bottom:5%;
+    left:10.5%;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:0 1px;
+
+    overflow:visible;
+
+    overscroll-behavior:auto;
+  }
+
+  .rsvp-paper-header{
+    top:0;
+
+    margin:0 0 9px;
+
+    padding-top:4px;
+
+    transform:none;
+  }
+
+  .rsvp-paper-header h2{
+    margin:0;
+
+    font-size:22px;
+    line-height:1.08;
+    font-weight:600;
+
+    letter-spacing:-.2px;
+
+    white-space:nowrap;
+  }
+
+  .rsvp-intro{
+    margin-top:7px;
+
+    font-size:9.5px;
+    line-height:1.34;
+    font-weight:500;
+  }
+
+  .rsvp-field{
+    margin-bottom:7px;
+  }
+
+  .rsvp-field label,
+  .rsvp-attendance legend{
+    margin-bottom:4px;
+
+    font-size:9.5px;
+    line-height:1.2;
+    font-weight:700;
+  }
+
+  /*
+    16px prevents iOS Safari from automatically zooming the page
+    when a guest focuses the name or message field.
+  */
+  .rsvp-paper-form input[type="text"],
+  .rsvp-paper-form textarea,
+  .rsvp-paper-form select{
+    padding:4px 1px;
+
+    font-size:16px !important;
+    line-height:1.1;
+  }
+
+  .rsvp-paper-form textarea{
+    height:34px;
+    min-height:34px;
+
+    resize:none;
+  }
+
+  .rsvp-attendance{
+    margin:0 0 6px;
+  }
+
+  .rsvp-option{
+    gap:6px;
+
+    margin-bottom:4px;
+
+    font-size:8.8px;
+    line-height:1.2;
+  }
+
+  .rsvp-option input[type="radio"]{
+    width:13px;
+    height:13px;
+  }
+
+  .rsvp-submit,
+  .rsvp-paper-form .rsvp-submit{
+    width:100%;
+
+    margin-top:2px;
+
+    padding:9px 10px;
+
+    font-size:10px;
+    font-weight:700;
+  }
+
+  #rsvpStatus,
+  .rsvp-status{
+    min-height:12px;
+
+    margin-top:5px;
+
+    font-size:7.8px;
+    line-height:1.25;
+    font-weight:600;
+  }
+
+  .rsvp-close{
+    top:7%;
+    right:6%;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width:360px){
+
+  .opening-envelope{
+    width:74vw;
+  }
+
+  .intro-butterfly{
+    width:58px;
+  }
+
+  .details-wrap{
+    width:90vw;
+  }
+
+  .details-title{
+    font-size:18px;
+  }
+
+  .music-control{
+    left:4px;
+
+    width:112px;
+    height:112px;
+  }
+
+  .details-paper-modal,
+  .rsvp-paper-modal{
+    width:90vw;
+  }
+
+  .details-paper-header h2{
+    font-size:21px;
+  }
+
+  .details-event{
+    grid-template-columns:50px 1fr;
+
+    gap:8px;
+
+    min-height:55px;
+  }
+
+  .details-event time{
+    font-size:14px;
+  }
+
+  .details-event-copy strong{
+    font-size:10.8px;
+  }
+
+  .details-event-copy span{
+    font-size:8.1px;
+  }
+
+  .rsvp-paper-modal{
+    transform:translateY(10px);
+  }
+
+  .rsvp-paper-content{
+    top:19%;
+    right:9.5%;
+    left:9.5%;
+  }
+
+  .rsvp-paper-header h2{
+    font-size:20px;
+  }
+
+  .rsvp-intro{
+    font-size:8.7px;
+  }
+
+  .rsvp-option{
+    font-size:8.4px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION — MOBILE SAFETY
+========================================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  .opening-hint{
+    animation:none !important;
+    opacity:1;
+  }
+}
+/* =========================================================
+   RSVP MOBILE — DESKTOP-LIKE SPACING
+========================================================= */
+
+@media (max-width:430px){
+
+  #rsvpModal{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:
+      max(6px, env(safe-area-inset-top))
+      6px
+      max(6px, env(safe-area-inset-bottom));
+
+    overflow:hidden;
+  }
+
+  .rsvp-paper-modal{
+    width:min(94vw,400px);
+    max-height:94svh;
+
+    margin:auto;
+
+    overflow:visible;
+
+    transform:translateY(12px);
+  }
+
+  .rsvp-paper-content{
+    top:18%;
+    right:11%;
+    bottom:7%;
+    left:11%;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:0 2px;
+
+    overflow:visible;
+  }
+
+  .rsvp-paper-header{
+    top:0;
+
+    margin:0 0 24px;
+
+    padding-top:6px;
+  }
+
+  .rsvp-paper-header h2{
+    margin:0;
+
+    font-size:24px;
+    line-height:1.12;
+    font-weight:600;
+
+    white-space:nowrap;
+  }
+
+  .rsvp-intro{
+    margin-top:10px;
+
+    font-size:10.5px;
+    line-height:1.5;
+
+    font-weight:500;
+  }
+
+  .rsvp-field{
+    margin-bottom:18px;
+  }
+
+  .rsvp-field label,
+  .rsvp-attendance legend{
+    margin-bottom:8px;
+
+    font-size:10.5px;
+    line-height:1.3;
+
+    font-weight:700;
+  }
+
+  .rsvp-paper-form input[type="text"],
+  .rsvp-paper-form textarea{
+    padding:
+      8px 2px 8px;
+
+    font-size:16px !important;
+    line-height:1.3;
+  }
+
+  .rsvp-paper-form textarea{
+    min-height:58px;
+    height:58px;
+
+    resize:none;
+  }
+
+  .rsvp-attendance{
+    margin:
+      2px 0 18px;
+  }
+
+  .rsvp-option{
+    gap:9px;
+
+    margin-bottom:9px;
+
+    font-size:10px;
+    line-height:1.4;
+  }
+
+  .rsvp-option input[type="radio"]{
+    width:15px;
+    height:15px;
+  }
+
+  .rsvp-submit{
+    width:100%;
+
+    margin-top:6px;
+
+    padding:
+      12px 14px;
+
+    font-size:10.5px;
+
+    font-weight:700;
+  }
+
+  #rsvpStatus,
+  .rsvp-status{
+    min-height:15px;
+
+    margin-top:8px;
+
+    font-size:8.5px;
+    line-height:1.3;
+  }
+
+  .rsvp-close{
+    top:7%;
+    right:6%;
+  }
+}
+/* ALL MAIN TITLES — SAME FONT AS "ოთო და თაკო" */
+
+.lace-names,
+.details-title,
+.details-paper-header h2,
+.rsvp-card-copy h3,
+.rsvp-paper-header h2{
+  font-family:
+    "GL Kupiura",
+    "Noto Serif Georgian",
+    Georgia,
+    serif;
+}
+/* =========================================================
+   FINAL TYPOGRAPHY FIX — MOBILE + DESKTOP
+========================================================= */
+
+.lace-names,
+.lace-names span{
+  font-family:
+    "GL Kupiura",
+    "Noto Serif Georgian",
+    Georgia,
+    serif !important;
+
+  font-size:20px !important;
+  line-height:1.15;
+  font-weight:500 !important;
+  letter-spacing:.2px;
+}
+
+
+/* ALL MAIN HEADINGS — SAME FONT */
+
+.details-title,
+.details-paper-header h2,
+.rsvp-card-copy h3,
+.rsvp-paper-header h2{
+  font-family:
+    "GL Kupiura",
+    "Noto Serif Georgian",
+    Georgia,
+    serif !important;
+}
+
+/* =====================================================
+   RSVP — ADULTS ONLY NOTE
+===================================================== */
+
+.rsvp-note {
+  max-width: 280px;
+  margin: 12px auto 0;
+
+  text-align: center;
+
+  font-size: 12px;
+  line-height: 1.5;
+
+  color: rgba(17, 25, 12, 0.72);
+}
+/* =====================================================
+   DRESS CODE
+===================================================== */
+
+.dress-code {
+  margin-top: 12px;
+  padding-top: 0;
+
+  border-top: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 5px;
+
+  text-align: center;
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dress-code strong {
+  display: block;
+
+  font-family: "GL Kupiura", Georgia, serif;
+
+  font-size: 12px;
+  line-height: 1.2;
+
+  font-weight: 600;
+  letter-spacing: 1.2px;
+
+  text-transform: uppercase;
+}
+
+.dress-code span {
+  display: block;
+
+  width: 100%;
+  max-width: 290px;
+
+  font-family: "GL Kupiura", Georgia, serif;
+
+  font-size: 11px;
+  line-height: 1.45;
+
+  color: rgba(17, 25, 12, 0.75);
+
+  text-align: center;
+
+  white-space: normal;
+  overflow: visible;
+}
